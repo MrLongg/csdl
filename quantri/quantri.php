@@ -15,12 +15,13 @@
 
         <!--Icons-->
         <script src="js/lumino.glyphs.js"></script>
-
-        [if lt IE 9]>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>	
+        <!-- [if lt IE 9]>
         <script src="js/html5shiv.js"></script>
         <script src="js/respond.min.js"></script>
-        <![endif]
+        <![endif] -->
         <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+
     </head>
 
     <body>
@@ -55,14 +56,14 @@
             <ul class="nav menu">
                 <li class="active"><a href="quantri.php"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg>Home </a></li>
                 <li class="parent ">
-                        <ul class="children collapse" id="sub-item-1">
-                            <li>
-                                <a href="quantri.php?page_layout=themtv">
-                                    <svg class="glyph stroked plus sign"><use xlink:href="#stroked-plus-sign"/></svg>
-                                    Thêm mới
-                                </a>
-                            </li>
-                        </ul>			
+                    <a href="quantri.php?page_layout=search">
+                        <span data-toggle="collapse" href="#sub-item-5"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Search Supply
+                    </a>		
+                </li>
+                <li class="parent ">
+                    <a href="quantri.php?page_layout=searchSu">
+                        <span data-toggle="collapse" href="#sub-item-5"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Search Supplier
+                    </a>		
                 </li>
                 <li class="parent ">
                     <a href="quantri.php?page_layout=danhsachdm">
@@ -75,7 +76,7 @@
                     </a>			
                 </li>
                 <li class="parent ">
-                    <a href="quantri.php?page_layout=blsp">
+                    <a href="quantri.php?page_layout=order">
                         <span data-toggle="collapse" href="#sub-item-4"><svg class="glyph stroked two messages"><use xlink:href="#stroked-chevron-down"/></svg></span> Order Management
                     </a>
 
@@ -101,31 +102,17 @@
                             break;
                         case 'danhsachdm':include_once'./chucnang/danhmuc/danhsachdm.php';
                             break;
-                        case 'suadm':include_once'./chucnang/danhmuc/suadm.php';
-                            break;
-                        case 'suasp':include_once'./chucnang/sanpham/suasp.php';
-                            break;
-                        case 'themsp':include_once'./chucnang/sanpham/themsp.php';
-                            break;
-                        case 'themdm':include_once'./chucnang/danhmuc/themdm.php';
-                            break;
-                        case 'blsp': include_once'./chucnang/order/binhluan.php';
-                            break;
-                        case 'suabl': include_once'./chucnang/order/suabl.php';
-                            break;
-                        case 'quanlytv': include_once'./chucnang/thanhvien/quanlytv.php';
-                            break;
-                        case 'themtv': include_once'./chucnang/thanhvien/themtv.php';
-                            break;
-                        case 'suatv': include_once'./chucnang/thanhvien/suatv.php';
+                        case 'order': include_once'./chucnang/order/order.php';
                             break;
                         case 'supplier': include_once'./chucnang/supplier/supplier.php';
                             break;
-                        case 'themsupplier': include_once'./chucnang/supplier/themsupplier.php';
+                        case 'themquangcao': include_once'./chucnang/supplier/themsupplier.php';
                             break;
                         case 'detail': include_once'./chucnang/supplier/detail.php';
                             break;
-                        case 'suaquangcao': include_once'./chucnang/supplier/suaquangcao.php';
+                        case 'search': include_once'./searchSupply.php';
+                            break;
+                        case 'searchSu': include_once'./searchSu.php';
                             break;
                         default:include_once'./gioithieu.php';
                     }
@@ -144,6 +131,7 @@
         <script src="js/easypiechart-data.js"></script>
         <script src="js/bootstrap-datepicker.js"></script>	
         <script src="js/bootstrap-table.js"></script>
+               
         <link rel="stylesheet" href="css/bootstrap-table.css"/>
         <script>
             $('#calendar').datepicker({
@@ -164,7 +152,55 @@
                 if ($(window).width() <= 767)
                     $('#sidebar-collapse').collapse('hide')
             })
-        </script>	
+        </script>
+    
+        <script type = "text/javascript">
+        $(document).ready(function(){
+            $("#live_search").keyup(function(){
+                var input = $(this).val();
+                //alert(input);
+
+                if(input != ""){
+                    $.ajax({
+                        url: "livesearch.php",
+                        method:"POST",
+                        data:{input:input},
+
+                        success:function(data){
+                            $("#searchresult").html(data);
+                        }
+                    });
+                } else {
+
+                    $("#searchresult").css("display", "none");
+                }
+            })
+        })
+        </script>
+
+        <script type = "text/javascript">
+        $(document).ready(function(){
+            $("#live_search1").keyup(function(){
+                var input = $(this).val();
+                //alert(input);
+
+                if(input != ""){
+                    $.ajax({
+                        url: "livesearchSupply.php",
+                        method:"POST",
+                        data:{input:input},
+
+                        success:function(data){
+                            $("#searchresult1").html(data);
+                        }
+                    });
+                } else {
+
+                    $("#searchresult1").css("display", "none");
+                }
+            })
+        })
+        </script>
     </body>
 
 </html>

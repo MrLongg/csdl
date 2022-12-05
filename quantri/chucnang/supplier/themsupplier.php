@@ -13,6 +13,7 @@
         $sdt2=$_POST['sdt2'];
         $sdt3=$_POST['sdt3'];
         $manv=$_POST['manv'];
+        $result = mysqli_query($conn, "ALTER table supplier AUTO_INCREMENT 1");
         $result1 = mysqli_query($conn,"INSERT INTO supplier(bankAccount, name, address, taxCode, paCode)
                                         values ('$taikhoan','$ten', '$diachi', '$mathue', '$manv')");
         $id = mysqli_insert_id($conn);
@@ -37,6 +38,7 @@
 			$result7 = mysqli_query($conn, "INSERT INTO suphonenumber(suCode, suPhone)
 											values ('$id', '$sdt1')");
 		}
+        
     }
 ?>
 <div class="row">

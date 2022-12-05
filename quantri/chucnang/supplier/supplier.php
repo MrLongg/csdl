@@ -1,3 +1,4 @@
+
 <?php
 	if(isset($_GET['page']))
     {
@@ -39,13 +40,13 @@
     <div class="col-lg-12">
         <div class="panel panel-default">					
             <div class="panel-body" style="position: relative;">
-                <a href="quantri.php?page_layout=themsupplier" class="btn btn-primary" style="margin: 10px 0 20px 0; position: absolute;">Add Supplier</a>			
+                <a href="quantri.php?page_layout=themquangcao" class="btn btn-primary" style="margin: 10px 0 20px 0; position: absolute;">Add Supplier</a>			
                 <table data-toggle="table" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-sort-name="name" data-sort-order="desc">
                     <thead>
                         <tr>						        
                             <th data-sortable="true">ID</th>
                             <th data-sortable="true">Name</th>
-                            <!-- <th data-sortable="true">Category Name</th> -->
+                            <th data-sortable="true">Category Name</th>
                             <th data-sortable="true">Address</th>
                             <th data-sortable="true">Bank_Account</th>
                             <th data-sortable="true">Tax_Code</th>
@@ -58,16 +59,18 @@
                         <?php 
                             	$sql="SELECT * FROM supplier LIMIT $perPage,$rowPerPage";
                                 $query=mysqli_query($conn,$sql);
-                                while($row=mysqli_fetch_array($query)){
+                                while($row=mysqli_fetch_array($query)){ 
                                 $su_Code = $row['suCode'];
                                 $sql_suPhone = "SELECT * FROM suphonenumber Where suCode = $su_Code";
                                 $query1 = mysqli_query($conn, $sql_suPhone);
+                            
+                           
                         ?>
                         <tr style="height: 300px;">
                             <td data-checkbox="true"><?php echo $row['suCode']; ?></td>
                             <td data-checkbox="true"><?php echo $row['name']; ?></td>
-                            <!-- <td data-checkbox="true">
-                                 <?php
+                            <td data-checkbox="true">
+                                <?php
                                     $sql_category = "SELECT * FROM  category, provide where suCode = $su_Code and category.caCode = provide.caCode and provide.suCode = $su_Code";
                                     $query3 = mysqli_query($conn, $sql_category);
                                     while($row_category = mysqli_fetch_array($query3 )){
@@ -76,8 +79,8 @@
                                  <br>
                                 <?php
                                     }
-                                ?> 
-                            </td> -->
+                                ?>
+                            </td>
                             <td data-checkbox="true"><?php echo $row['address']; ?></td>
                             <td data-checkbox="true"><?php echo $row['bankAccount']; ?></td>
                             <td data-checkbox="true"><?php echo $row['taxCode']; ?></td>

@@ -1,9 +1,4 @@
-<script>
-    function xoadanhmuc(){
-        var conf= confirm("Bạn có chắc chắn muốn xóa mục này hay không?");
-        return conf;
-    }
-</script>
+
 <?php
     if(isset($_GET['page'])){
         $page=$_GET['page'];
@@ -43,7 +38,6 @@
         <div class="panel panel-default">
 
             <div class="panel-body" style="position: relative;">
-                <a href="quantri.php?page_layout=themdm" class="btn btn-primary" style="margin: 10px 0 20px 0; position: absolute;">Add new categories</a>
                 <table data-toggle="table" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-sort-name="name" data-sort-order="desc">
                     <thead>
                         <tr>						        
@@ -55,6 +49,7 @@
                             <th data-sortable="true">Purchase Price</th>
                             <th data-sortable="true">Current Price</th>
                             <th data-sortable="true">Quantity</th>
+                            <th data-sortable="true">Quantity Warehouse</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,22 +58,28 @@
                             $query = mysqli_query($conn,$sql);
                             while($row= mysqli_fetch_array($query)) {
                                 $ca_Code = $row['caCode'];
-                                $sql_bolt = "SELECT * FROM bolt WHERE bolt.caCode =  $ca_Code";
-                                $query1 = mysqli_query($conn, $sql_bolt);
-                            
                         ?>
                         <tr>
                             <td data-checkbox="true"><?php echo $row['caCode']; ?></td>
                             <td data-checkbox="true"><?php echo $row['name']; ?></td>	
-                            <td data-checkbox="true">Length :
+                            <td data-checkbox="true">
+                                
                                 <?php
+                                    $sql_bolt = "SELECT * FROM bolt WHERE bolt.caCode =  $ca_Code";
+                                    $query1 = mysqli_query($conn, $sql_bolt);  
                                     while($row_bolt = mysqli_fetch_array($query1)) {
-                                        echo $row_bolt ['length']
+                                        
                                 ?>
-                                 <?php 
-                                     }
+                                Length :
+                                <?php 
+                                      
+                                      echo $row_bolt ['length']; 
                                 ?>
-                            </td>	
+                            <br>
+                                <?php
+                                    }
+                                ?>
+                            </td>                            
                             <td data-checkbox="true"><?php echo $row['color']; ?></td>	
                             <td data-checkbox="true">
                                 <?php
@@ -121,7 +122,18 @@
                                     }
                                 ?>
                             </td>
-                            <td data-checkbox="true"><?php echo $row['quantity'];?></td>				        
+                            <td data-checkbox="true"><?php echo $row['quantity'];?></td>
+                            <?php
+                                    $sql_quantity = "SELECT * FROM  provide where $ca_Code = provide.caCode";
+                                    $query5 = mysqli_query($conn,  $sql_puPrice);
+                                    while($row_quanti =  mysqli_fetch_array($query5))
+                                    {
+                                ?>	
+                            <td data-checkbox="true"><?php echo $row_quanti['quantity'];?>
+                                <?php
+                                    }
+                                ?>
+                            </td>				        
                         </tr>
                         <?php  
                             }

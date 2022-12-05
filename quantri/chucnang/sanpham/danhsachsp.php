@@ -1,10 +1,3 @@
-<script>
-    function xoasp(){
-        var conf=confirm("Bạn có muốn xóa sản phẩm này không?");
-        return conf;
-    }
-
-</script>
 <?php  
     if(isset($_GET['page']))
     {
@@ -15,7 +8,7 @@
     }
     $rowPerPage=5;
     $perPage=$page*$rowPerPage-$rowPerPage;
-    $sql="SELECT * FROM category ORDER BY caCode DESC LIMIT $perPage,$rowPerPage";
+    $sql="SELECT * FROM category ORDER BY caCode LIMIT $perPage,$rowPerPage";
     $query=mysqli_query($conn,$sql);
     $totalRows=mysqli_num_rows(mysqli_query($conn, "SELECT * FROM category"));
     $totalPages=ceil($totalRows/$rowPerPage);
@@ -40,7 +33,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Quản lý sản phẩm</h1>
+        <h1 class="page-header">Product Managemnet </h1>
     </div>
 </div><!--/.row-->
 
@@ -49,36 +42,103 @@
     <div class="col-lg-12">
         <div class="panel panel-default">					
             <div class="panel-body" style="position: relative;">
-                <a href="quantri.php?page_layout=themsp" class="btn btn-primary" style="margin: 10px 0 20px 0; position: absolute;">Thêm sản phẩm mới</a>				
                 <table data-toggle="table" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-sort-name="name" data-sort-order="desc">
                     <thead>
                         <tr>						        
                             <th data-sortable="true">ID</th>
-                            <th data-sortable="true">Tên sản phẩm</th>
-                            <th data-sortable="true">Giá</th>
-                            <th data-sortable="true">Nhà cung cấp</th>
-                            <th data-sortable="true">Ảnh mô tả</th>
-                            <th data-sortable="true">Sửa</th>
-                            <th data-sortable="true">Xóa</th>
+                            <th data-sortable="true">Category</th>
+                            <th data-sortable="true">Bolt</th>
+                            <th data-sortable="true">Color</th>
+                            <th data-sortable="true">Supplier Name</th>
+                            <th data-sortable="true">Phone Supplier</th>
+                            <th data-sortable="true">Purchase Price</th>
+                            <th data-sortable="true">Current Price</th>
+                            <th data-sortable="true">Quantity Import</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php  
                             while($row=mysqli_fetch_array($query)){
+                               $ca_Code = $row['caCode']; 
                         ?>
                         <tr style="height: 300px;">
-                            <td data-checkbox="true"><?php echo $row['id_sp']; ?></td>
-                            <td data-checkbox="true"><a href="quantri.php?page_layout=suasp&id_sp=<?php echo $row['id_sp']; ?>"><?php echo $row['ten_sp']; ?></a></td>
-                            <td data-checkbox="true"><?php echo $row['gia_sp']; ?></td>
-                            <td data-sortable="true"><?php echo $row['ten_dm']; ?></td>
+                            <td data-checkbox="true"><?php echo $row['caCode']; ?></td>
+                            <td data-checkbox="true"><?php echo $row['name']; ?></td>
+                            <td data-checkbox="true">
+                                <?php
+                                    $sql_bolt = "SELECT * FROM bolt WHERE bolt.caCode =  $ca_Code";
+                                    $query1 = mysqli_query($conn, $sql_bolt);  
+                                    while($row_bolt = mysqli_fetch_array($query1)) {
+                                        
+                                ?>
+                                Length :
+                                <?php 
+                                      
+                                      echo $row_bolt ['length']; 
+                                ?>
+                                <br>
+                                <?php
+                                    }
+                                ?>
+                            </td>        
                             <td data-sortable="true">
-                                <span class="thumb"><img width="80px" height="150px" src="anh/<?php echo $row['anh_sp'] ?>" /></span>
-                            </td>						        
-                            <td>
-                                <a href="quantri.php?page_layout=suasp&id_sp=<?php echo $row['id_sp']; ?>"><span><svg class="glyph stroked brush" style="width: 20px;height: 20px;"><use xlink:href="#stroked-brush"/></svg></span></a>
+                                <?php echo $row['color'] ?>
+                            </td>        
+                            <td data-checkbox="true">
+                                <?php
+                                    $sql_sup = "SELECT * FROM provide, supplier where provide.caCode = $ca_Code and provide.suCode = supplier.suCode ";
+                                    $query2 = mysqli_query($conn, $sql_sup);
+                                    while($row_sup = mysqli_fetch_array($query2)){
+                                    $suCode = $row_sup['suCode'];
+                                ?>
+                                 <?php echo $row_sup['name'] ?>
+                                 <br>
+                                <?php
+                                    }
+                                ?>
                             </td>
-                            <td>
-                                <a onclick="return xoasp();" href="./chucnang/sanpham/xoasp.php?id_sp=<?php echo $row['id_sp']; ?>"><span><svg class="glyph stroked cancel" style="width: 20px;height: 20px;"><use xlink:href="#stroked-cancel"/></svg></span></a>
+                            <td data-sortable="true">
+                                <?php
+                                    $sql_suPhone = "SELECT * FROM suphonenumber WHERE suphonenumber.suCode = $suCode";
+                                    $query3  = mysqli_query($conn, $sql_suPhone);
+                                    while($row_suphone = mysqli_fetch_array($query3)){
+                                ?> 
+                                 <?php echo $row_suphone['suPhone'] ?>
+                                 <br>
+                                 <?php
+                                    }
+                                ?>   
+                            </td>						                     
+                            <td data-checkbox="true">
+                            <?php
+                                    $sql_puPrice = "SELECT * FROM  provide where $ca_Code = provide.caCode";
+                                    $query4 = mysqli_query($conn,  $sql_puPrice);
+                                    while($row_puPrice =  mysqli_fetch_array($query4))
+                                    {
+                                ?>
+                                <?php echo $row_puPrice['purPrice'] ?>
+                                <br>
+                                Date : <?php echo $row_puPrice['dateImport'] ?>
+                                <?php
+                                    }
+                                ?>
+                            </td>
+                            <td data-checkbox="true">
+                                <?php
+                                    $sql_cuPrice = "SELECT * FROM  cacurrentprices where $ca_Code = cacurrentprices.caCode";
+                                    $query5 = mysqli_query($conn,  $sql_cuPrice);
+                                    while($row_cuPrice =  mysqli_fetch_array($query5))
+                                    {
+                                ?>
+                                <?php echo $row_cuPrice['caPrice'] ?>
+                                <br>
+                                Date : <?php echo $row_cuPrice['caDate'] ?>
+                                <?php
+                                    }
+                                ?>
+                            </td>
+                            <td data-sortable="true">
+                                <?php echo $row['quantity'] ?>
                             </td>
                         </tr>
                         <?php  
